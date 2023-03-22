@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROGRAMA 4</title>
+    <style>
+        html
+        {
+            background-image: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+
+        }
+        body
+        {            
+            height: 100vh;         
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 200px;
+            box-sizing: border-box;
+
+        }
+        
+        h1, label
+        {
+            color: #ee5e90;
+        }
+
+        label
+        {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>
+        ¿Puedes acertar en el centro de la Diana?
+    </h1>
+
+    <canvas width="600" height="400"></canvas>
+    <div class="labels">
+        <label for="" id="">SCORE:</label>
+        <label for="" id="score"></label>
+    </div>
+    <script>
+        
+        var pantalla = document.querySelector("canvas");
+        var pincel = pantalla.getContext("2d");
+        var score = 0;
+        var radio = 10;
+        var life = 3;
+        var xAleatorio;
+        var yAleatorio;
+
+        pincel.fillStyle = "grey";
+        pincel.fillRect (0,0,600,400);
+        confirmador = true;
+        
+
+        function disenarCircunferencia (x, y,radio, color)
+        {
+            pincel.fillStyle = color;
+            pincel.beginPath();
+            pincel.arc(x, y, radio, 0, 2*Math.PI)
+            pincel.fill();
+        }
+        
+        function limpiarPantalla ()
+        {
+            pincel.clearRect(0,0,600,400)
+            pincel.fillStyle = "grey";
+            pincel.fillRect (0,0,600,400);   
+        }
+
+        var x = 0;
+        
+        /*
+        for (var x = 20; x < 30; x++)
+        {            
+            //disenarCircunferencia((x * 20),20,10);
+            
+        }
+        */
+        
+        function actualizarPantalla ()
+        {
+            limpiarPantalla();
+            disenarCircunferencia(x,20,10);
+            
+            /*
+            disenarCircunferencia(x,60,10);
+            if(x<600 && confirmador)
+                x++;
+            else
+            {
+                x--;
+                confirmador = false;
+                if(x ==0)
+                {
+                    confirmador = true;
+                }
+            }
+            */
+
+        }
+        
+        //setInterval(actualizarPantalla,2);
+
+        
+
+        function disenarObjetivo (x,y)
+        {
+            disenarCircunferencia(x,y,radio + 20,"red");
+            disenarCircunferencia(x,y,radio +10,"white");
+            disenarCircunferencia(x,y,radio,"red");
+        }
+        
+        function sortearPosicion (maximo)
+        {
+            return Math.floor(Math.random()*maximo)
+        }             
+        
+        function juego()
+        {
+            limpiarPantalla();
+            xAleatorio = sortearPosicion(600);
+            yAleatorio = sortearPosicion(400);
+            disenarObjetivo(xAleatorio, yAleatorio)
+
+            posicionX = xAleatorio;
+            posicionY = yAleatorio;
+        }
+
+        function disparar (evento)
+        {
+            var x = evento.pageX - pantalla.offsetLeft;
+            var y = evento.pageY - pantalla.offsetTop;
+            
+            if ((x < xAleatorio + radio)&&(x >  xAleatorio - radio )&& (y < yAleatorio + radio) && (y > yAleatorio - radio)) 
+            {
+                document.querySelector("#score").innerHTML = ++score;
+            }
+        }
+
+        setInterval(juego,1000)
+
+        pantalla.onclick = disparar;
+        
+    </script>
+
+</body>
+</html>
